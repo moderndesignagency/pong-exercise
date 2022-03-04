@@ -14,13 +14,16 @@ type Ball struct {
 func (b *Ball) Update(leftPaddle *Paddle, rightPaddle *Paddle, screen *Screen) {
 	_, h := screen.Size()
 
+	nextX := b.Cx + b.Vx
+	nextY := b.Cy + b.Vy
+
 	// Bounce off top and bottom edges
-	if b.Cy+b.Radius > h || b.Cy-b.Radius < 0 {
+	if nextY+b.Radius > h || b.Cy-b.Radius < 0 {
 		b.Vy = -b.Vy
 	}
 
 	// bounce off right paddle
-	if b.Vx > 0 && b.Cx+b.Radius > rightPaddle.X && b.Cy+b.Radius > rightPaddle.Y && b.Cy-b.Radius < rightPaddle.Y+float32(rightPaddle.Height) {
+	if b.Vx > 0 && nextX+b.Radius > rightPaddle.X && b.Cy+b.Radius > rightPaddle.Y && b.Cy-b.Radius < rightPaddle.Y+float32(rightPaddle.Height) {
 		b.Vx = -b.Vx
 	} else if b.Vx < 0 && b.Cx-b.Radius < leftPaddle.X+float32(leftPaddle.Width) && b.Cy+b.Radius > leftPaddle.Y && b.Cy-b.Radius < leftPaddle.Y+float32(leftPaddle.Height) {
 		b.Vx = -b.Vx
