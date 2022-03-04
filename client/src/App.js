@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import './App.css'
 import { useGetGameStateQuery } from './store/game'
 import { draw, setupCanvas } from './drawer'
+import Header from './components/Header/Header'
 
 function App() {
   const canvasRef = useRef(null)
@@ -24,6 +25,7 @@ function App() {
 
   return (
     <div className="App">
+      <Header />
       <canvas ref={canvasRef}></canvas>
     </div>
   )
