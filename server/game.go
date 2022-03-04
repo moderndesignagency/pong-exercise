@@ -85,14 +85,14 @@ func (g *Game) Init() {
 		Vx:     initBallVelocity,
 		Vy:     -initBallVelocity,
 	}
-	g.Level = 0
+	g.Level = 1
 }
 
 func (g *Game) reset(state GameState) {
 	w, h := g.Screen.Size()
 	g.State = state
 	g.rally = 0
-	g.Level = 0
+	g.Level = 1
 	if state == StartState {
 		g.Player1.Score = 0
 		g.Player2.Score = 0

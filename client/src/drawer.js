@@ -49,12 +49,12 @@ export function draw(canvas, gameState) {
 
   // Players
   ctx.font = '30px Arial'
-  ctx.fillText('Player 1', 180, 140)
-  ctx.fillText('Player 2', canvas.width - 195, 140)
+  ctx.fillText('Player 1', 170, 140)
+  ctx.fillText('Player 2', canvas.width - 190, 140)
 
   // Level
   ctx.font = '20px Arial'
-  ctx.fillText(`Level: ${gameState.level + 1}`, canvas.width / 2, 30)
+  ctx.fillText(`Level: ${gameState.level}`, canvas.width / 2, 30)
 }
 
 function drawRect(ctx, x, y, w, h, color) {
