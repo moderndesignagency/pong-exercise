@@ -22,8 +22,6 @@ func getGameState(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rw.Header().Set("Content-Type", "application/json")
-	g.Update()
-	g.Update()
 	json.NewEncoder(rw).Encode(g)
 }
 
