@@ -1,25 +1,22 @@
 import React, { useRef, useEffect } from 'react'
 import './App.css'
 import { useGetGameStateQuery } from './store/game'
-import {draw, setupCanvas} from './drawer'
+import { draw, setupCanvas } from './drawer'
 
 function App() {
   const canvasRef = useRef(null)
-  const {
-    data,
-    isLoading
-  } = useGetGameStateQuery('', {
-    pollingInterval: 20,
-    skip: false,
-  })
+  const { data, isLoading } = useGetGameStateQuery('')
 
   useEffect(() => {
-    console.log('Loading terminated')
-    setupCanvas(canvasRef.current)
+    if (!isLoading && canvasRef.current) {
+      setupCanvas(canvasRef.current)
+    }
   }, [canvasRef, isLoading])
 
   useEffect(() => {
-    draw(canvasRef.current, data)
+    if (canvasRef.current) {
+      draw(canvasRef.current, data)
+    }
   }, [canvasRef, data])
 
   if (isLoading) return <div>Loading...</div>
