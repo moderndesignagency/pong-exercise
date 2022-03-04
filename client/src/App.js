@@ -3,6 +3,7 @@ import './App.css'
 import { useGetGameStateQuery } from './store/game'
 import { draw, setupCanvas } from './drawer'
 import Header from './components/Header/Header'
+import OfflinePlaceholder from './components/OfflinePlaceholder/OfflinePlaceholder'
 
 function App() {
   const canvasRef = useRef(null)
@@ -20,8 +21,8 @@ function App() {
     }
   }, [canvasRef, data])
 
-  if (isLoading) return <div>Loading...</div>
-  if (!data) return <div>Missing data</div>
+  if (isLoading) return <div className='loading-app'>Loading...</div>
+  if (!data) return <OfflinePlaceholder />
 
   return (
     <div className="App">

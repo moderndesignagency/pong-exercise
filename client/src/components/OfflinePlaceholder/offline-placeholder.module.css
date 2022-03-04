@@ -1,0 +1,18 @@
+.offline-placeholder {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.offline-placeholder__button {
+  display: inline-block;
+  outline: 0;
+  background-color: var(--bs-primary);
+  color: #fff;
+  padding: 0.5rem 2rem;
+  border: none;
+  box-shadow: none;
+  border-radius: 5px;
+}
