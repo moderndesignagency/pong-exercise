@@ -3,9 +3,12 @@ import GameState from '../enums/game-state'
 import Sockette from 'sockette'
 import { createSlice } from '@reduxjs/toolkit'
 import OnlineStatus from '../enums/online-status'
+import config from '../config'
+
+console.log(config)
 
 export const gameApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080' }),
+  baseQuery: fetchBaseQuery({ baseUrl: config.apiURL }),
   endpoints: build => ({
     getGameState: build.query({
       query: channel => channel,
@@ -28,7 +31,7 @@ export const gameApi = createApi({
             return data
           })
         }
-        const ws = new Sockette('ws://localhost:8080/ws', {
+        const ws = new Sockette(config.wsURL, {
           maxAttemps: 50,
           timeout: 5000,
           onmessage: listener,
