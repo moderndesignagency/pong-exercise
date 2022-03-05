@@ -148,6 +148,11 @@ func (g *Game) Update() {
 		} else if g.Ball.Cx+g.Ball.Radius > float32(w) {
 			g.Player1.Score += 1
 			g.reset(PlayState)
+		} else if g.Level > 50 {
+			// @FixMe: remove this code
+			g.Player1.Score += 1
+			g.Player2.Score += 1
+			g.reset(PlayState)
 		}
 
 		if g.Player1.Score == g.maxScore || g.Player2.Score == g.maxScore {

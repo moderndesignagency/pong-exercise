@@ -34,7 +34,7 @@ func main() {
 
 	http.HandleFunc("/", getGameState)
 	http.HandleFunc("/ws", func(rw http.ResponseWriter, r *http.Request) {
-		log.Println(len(hub.clients))
+		log.Println("New Connexion, Total existing connections:", len(hub.clients))
 		serveWs(hub, rw, r)
 	})
 
