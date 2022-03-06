@@ -1,4 +1,4 @@
-import GameState from './enums/game-state'
+import GameState from '../enums/game-state'
 
 export function setupCanvas(canvas) {
   canvas.setAttribute('width', '800')

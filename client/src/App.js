@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import './App.css'
 import { useGetGameStateQuery } from './store/game/game-api'
-import { draw, setupCanvas } from './drawer'
+import { draw, setupCanvas } from './services/drawer'
 import Header from './components/Header/Header'
 import OfflinePlaceholder from './components/OfflinePlaceholder/OfflinePlaceholder'
 
