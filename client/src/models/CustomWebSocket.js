@@ -13,7 +13,7 @@ export default class CustomWebSocket {
     // Hooks
     this.onopen = options.onopen || noop
     this.onclose = options.onclose || noop
-    this.reconnect = options.onreconnect || noop
+    this.onreconnect = options.onreconnect || noop
     this.onmessage = options.onmessage || noop
     this.onerror = options.onerror || noop
 
@@ -39,12 +39,11 @@ export default class CustomWebSocket {
     ws.onerror = e => {
       e && e.code === 'ECONNREFUSED' ? this.reconnect(e) : this.onerror(e)
     }
-		this.ws = ws
+    this.ws = ws
   }
 
   reconnect(e) {
-    this.attempts += 1
-    if (this.timerId && this.attempts < this.maxAttempts) {
+    if (this.timerId && ++this.attempts < this.maxAttempts) {
       this.timerId = setTimeout(() => {
         this.onreconnect(e)
         this.open()
@@ -52,8 +51,12 @@ export default class CustomWebSocket {
     }
   }
 
-	close(code, reason) {
-		this.timerId = clearTimeout(this.timerId)
-		this.ws.close(code, reason)
-	}
+  close(code, reason) {
+    this.timerId = clearTimeout(this.timerId)
+    this.ws.close(code, reason)
+  }
+
+  send(message) {
+    this.ws.send(message)
+  }
 }
