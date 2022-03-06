@@ -5,12 +5,13 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/moderndesignagency/pong-exercise/server/ws"
 )
 
 var g *Game
-var addr = flag.String("addr", ":8080", "http service address")
+var addr = flag.String("addr", ":"+os.Getenv("PORT"), "http service address")
 
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")

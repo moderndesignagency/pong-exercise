@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"image/color"
 	"log"
+	"os"
 	"time"
 
 	"github.com/moderndesignagency/pong-exercise/server/input"
@@ -128,10 +129,11 @@ func (g *Game) update() {
 		w, _ := g.Screen.Size()
 
 		g.Player1.Update(g.Screen)
-		// g.Player2.Update(g.Screen)
-		// @FixMe: remove the code above
-		// g.Player1.AiUpdate(g.Screen, g.Ball)
-		g.Player2.AiUpdate(g.Screen, g.Ball)
+		if os.Getenv("PLAYER2_AI") == "true" {
+			g.Player2.AiUpdate(g.Screen, g.Ball)
+		} else {
+			g.Player2.Update(g.Screen)
+		}
 
 		prevVx := g.Ball.Vx
 		g.Ball.Update(g.Player1, g.Player2, g.Screen)
@@ -152,11 +154,6 @@ func (g *Game) update() {
 			g.reset(PlayState)
 		} else if g.Ball.Cx+g.Ball.Radius > float32(w) {
 			g.Player1.Score += 1
-			g.reset(PlayState)
-		} else if g.Level > 20 {
-			// @FixMe: remove this code
-			g.Player1.Score += 1
-			g.Player2.Score += 1
 			g.reset(PlayState)
 		}
 
