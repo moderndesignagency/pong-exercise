@@ -47,7 +47,7 @@ func (p *Paddle) Update(screen *Screen) {
 		p.Y += p.Speed
 	}
 
-	if p.Y-float32(p.Height/2) < 0 {
+	if p.Y < 0 {
 		p.Y = 0
 	} else if p.Y+float32(p.Height) > h {
 		p.Y = h - float32(p.Height)
