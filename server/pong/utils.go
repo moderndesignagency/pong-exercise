@@ -19,3 +19,19 @@ func RandomColor() color.Color {
 	r := rand.New(source)
 	return foregroundColors[r.Intn(len(foregroundColors))]
 }
+
+func RandomPlusOrMinusOne() int {
+	source := rand.NewSource(time.Now().UnixMicro())
+	r := rand.New(source)
+	if r.Intn(100) < 50 {
+		return -1
+	}
+	return 1
+}
+
+func Sign(f float32) float32 {
+	if f < 0 {
+		return -1
+	}
+	return 1
+}

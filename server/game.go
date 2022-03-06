@@ -33,7 +33,7 @@ const (
 )
 
 const (
-	windowWidth  = 800.0
+	windowWidth  = 900.0
 	windowHeight = 600.0
 )
 
@@ -85,8 +85,8 @@ func (g *Game) Init() {
 		Cy:     float32(windowHeight / 2),
 		Radius: InitBallRadius,
 		Color:  color.RGBA{255, 255, 255, 200},
-		Vx:     initBallVelocity,
-		Vy:     -initBallVelocity,
+		Vx:     float32(pong.RandomPlusOrMinusOne()) * initBallVelocity,
+		Vy:     float32(pong.RandomPlusOrMinusOne()) * initBallVelocity / 2,
 	}
 	g.Level = 1
 }
@@ -111,8 +111,8 @@ func (g *Game) reset(state GameState) {
 
 	g.Ball.Cx = w / 2
 	g.Ball.Cy = h / 2
-	g.Ball.Vx = initBallVelocity
-	g.Ball.Vy = -initBallVelocity
+	g.Ball.Vx = float32(pong.RandomPlusOrMinusOne()) * initBallVelocity
+	g.Ball.Vy = float32(pong.RandomPlusOrMinusOne()) * initBallVelocity / 2
 }
 
 func (g *Game) update() {
@@ -131,7 +131,8 @@ func (g *Game) update() {
 	case PlayState:
 		w, _ := g.Screen.Size()
 
-		g.Player1.Update(g.Screen)
+		// g.Player1.Update(g.Screen)
+		g.Player1.AiUpdate(g.Screen, g.Ball)
 		if os.Getenv("PLAYER2_AI") == "true" {
 			g.Player2.AiUpdate(g.Screen, g.Ball)
 		} else {
@@ -145,8 +146,8 @@ func (g *Game) update() {
 			g.rally += 1
 			if (g.rally)%speedUpdateCount == 0 {
 				g.Level++
-				g.Ball.Vx += speedIncrement
-				g.Ball.Vy += speedIncrement
+				g.Ball.Vx += pong.Sign(g.Ball.Vx) * speedIncrement
+				g.Ball.Vy += pong.Sign(g.Ball.Vx) * speedIncrement
 				g.Player1.Speed += speedIncrement / 2
 				g.Player2.Speed += speedIncrement / 2
 			}

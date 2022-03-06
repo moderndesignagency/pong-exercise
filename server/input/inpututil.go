@@ -4,9 +4,7 @@ import (
 	"sync"
 )
 
-/**
- * This is inspired by the ebiten inputstate package
- */
+// This is inspired by the ebiten inpututil package
 
 type inputState struct {
 	keyDurations     map[Key]int

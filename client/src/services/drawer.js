@@ -1,13 +1,17 @@
 import GameState from '../enums/game-state'
 
 function scaleCanvas(canvas) {
+  console.log(canvas.parentElement)
   const parentHeight = canvas.parentElement.offsetHeight
   const parentWidth = canvas.parentElement.offsetWidth
-  canvas.style.transform = `scale(${Math.min(parentHeight / 600, parentWidth / 800)})`
+  canvas.style.transform = `scale(${Math.min(
+    parentHeight / canvas.height,
+    parentWidth / canvas.width
+  )})`
 }
 
 export function setupCanvas(canvas) {
-  canvas.setAttribute('width', '800')
+  canvas.setAttribute('width', '900')
   canvas.setAttribute('height', '600')
   scaleCanvas(canvas)
 
@@ -20,6 +24,9 @@ export function setupCanvas(canvas) {
  * @param {*} gameState The current game state
  */
 export function draw(canvas, gameState) {
+  canvas.width = gameState.screen.width
+  canvas.height = gameState.screen.height
+
   if (gameState.state === GameState.OVER) {
     return drawGameOver(canvas, gameState)
   } else if (gameState.state === GameState.START) {
@@ -35,7 +42,7 @@ export function draw(canvas, gameState) {
     gameState.ball.cx + gameState.ball.radius,
     gameState.ball.cy + gameState.ball.radius,
     gameState.ball.radius,
-    'white'
+    parseColor(gameState.ball.color)
   )
 
   // Drawing paddles
@@ -45,7 +52,7 @@ export function draw(canvas, gameState) {
     gameState.player1.y,
     gameState.player1.width,
     gameState.player1.height,
-    'white'
+    parseColor(gameState.player1.color)
   )
   drawRect(
     ctx,
@@ -53,24 +60,30 @@ export function draw(canvas, gameState) {
     gameState.player2.y,
     gameState.player2.width,
     gameState.player2.height,
-    'white'
+    parseColor(gameState.player1.color)
   )
 
   // Score
   ctx.textAlign = 'center'
-  ctx.font = 'bold 200px Arial'
+  ctx.font = 'bold 200px "Patrick Hand"'
   ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
   ctx.fillText(gameState.player1.score, 170, 300)
   ctx.fillText(gameState.player2.score, canvas.width - 190, 300)
 
   // Players
-  ctx.font = '30px Arial'
-  ctx.fillText('Player 1', 170, 140)
-  ctx.fillText('Player 2', canvas.width - 190, 140)
+  ctx.font = '30px "Patrick Hand"'
+  ctx.fillText('PLAYER 1', 170, 140)
+  ctx.fillText('PLAYER 2', canvas.width - 190, 140)
 
   // Level
-  ctx.font = '20px Arial'
+  ctx.font = '25px "Patrick Hand"'
   ctx.fillText(`Level: ${gameState.level}`, canvas.width / 2, 30)
+
+  // Controls
+  ctx.textAlign = 'left'
+  ctx.fillText('Controls: W/S', 30, canvas.height - 30)
+  ctx.textAlign = 'right'
+  ctx.fillText('Controls: Up/Down', canvas.width - 30, canvas.height - 30)
 }
 
 function drawRect(ctx, x, y, w, h, color) {
@@ -100,10 +113,10 @@ function drawGameStart(canvas, gameState) {
   ctx.strokeStyle = 'white'
   ctx.lineWidth = 3
 
-  ctx.font = 'bold 90px Arial'
+  ctx.font = 'bold 90px "Patrick Hand"'
   ctx.strokeText('⚡PONG GAME⚡', canvas.width / 2, 200)
 
-  ctx.font = '50px Arial'
+  ctx.font = '50px "Patrick Hand"'
   ctx.fillText('Hit Space to start a new Game', canvas.width / 2, 300)
 }
 
@@ -117,19 +130,25 @@ function drawGameOver(canvas, gameState) {
   ctx.strokeStyle = 'white'
   ctx.lineWidth = 3
 
-  ctx.font = '20px Arial'
-  ctx.fillText(`Level: ${gameState.level}`, middleWidth, 30)
-
-  ctx.font = 'bold 100px Arial'
+  ctx.font = 'bold 100px "Patrick Hand"'
   ctx.strokeText('GAME OVER', middleWidth, 200)
 
-  ctx.font = 'bold 70px Arial'
+  ctx.font = 'bold 70px "Patrick Hand"'
   ctx.fillText(
     `✨ PLAYER ${gameState.player1.score > gameState.player2.score ? 1 : 2} Won ✨`,
     middleWidth,
     320
   )
 
-  ctx.font = '50px Arial'
+  ctx.font = '50px "Patrick Hand"'
   ctx.fillText('Hit Space to start a new Game', middleWidth, 400)
+
+  // Controls & Level
+  ctx.font = '25px "Patrick Hand"'
+  ctx.fillText(`Level: ${gameState.level}`, middleWidth, 30)
+
+  ctx.textAlign = 'left'
+  ctx.fillText('Controls: W/S', 30, canvas.height - 30)
+  ctx.textAlign = 'right'
+  ctx.fillText('Controls: Up/Down', canvas.width - 30, canvas.height - 30)
 }

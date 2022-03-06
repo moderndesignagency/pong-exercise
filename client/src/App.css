@@ -7,13 +7,20 @@
 
 .canvas-container {
   flex: 1;
-  max-width: 800px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  max-width: 100%;
+  max-width: 900px;
+  width: 100%;
   max-height: 100%;
+}
+
+
+@media screen and (orientation: portrait) {
+  .canvas-container {
+    align-items: flex-start;
+  }
 }
 
 .loading-app {
