@@ -27,9 +27,11 @@ function App() {
   if (!data) return <OfflinePlaceholder />
 
   return (
-    <div className="App">
+    <div className="app">
       <Header />
-      <canvas ref={canvasRef}></canvas>
+      <div className='canvas-container'>
+        <canvas ref={canvasRef}></canvas>
+      </div>
     </div>
   )
 }

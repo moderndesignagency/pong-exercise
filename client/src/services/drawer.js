@@ -1,17 +1,26 @@
 import GameState from '../enums/game-state'
 
+function scaleCanvas(canvas) {
+  const parentHeight = canvas.parentElement.offsetHeight
+  const parentWidth = canvas.parentElement.offsetWidth
+  canvas.style.transform = `scale(${Math.min(parentHeight / 600, parentWidth / 800)})`
+}
+
 export function setupCanvas(canvas) {
   canvas.setAttribute('width', '800')
   canvas.setAttribute('height', '600')
+  scaleCanvas(canvas)
+
+  window.addEventListener('resize', () => scaleCanvas(canvas))
 }
 
 /**
  * Draws the current game state on the canvas
- * @param {HTMLCanvasElement} canvas 
+ * @param {HTMLCanvasElement} canvas
  * @param {*} gameState The current game state
  */
 export function draw(canvas, gameState) {
-  if(gameState.state === GameState.OVER) {
+  if (gameState.state === GameState.OVER) {
     return drawGameOver(canvas, gameState)
   } else if (gameState.state === GameState.START) {
     return drawGameStart(canvas, gameState)
