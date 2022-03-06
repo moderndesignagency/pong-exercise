@@ -4,6 +4,7 @@ import { useGetGameStateQuery } from './store/game/game-api'
 import { draw, setupCanvas } from './services/drawer'
 import Header from './components/Header/Header'
 import OfflinePlaceholder from './components/OfflinePlaceholder/OfflinePlaceholder'
+import initKeysListening from './services/keys-listening';
 
 function App() {
   const canvasRef = useRef(null)
@@ -12,6 +13,7 @@ function App() {
   useEffect(() => {
     if (!isLoading && canvasRef.current) {
       setupCanvas(canvasRef.current)
+      initKeysListening()
     }
   }, [canvasRef, isLoading])
 
