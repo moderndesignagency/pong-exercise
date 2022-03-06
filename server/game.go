@@ -102,9 +102,11 @@ func (g *Game) reset(state GameState) {
 	}
 	g.Player1.X = InitPaddleShift
 	g.Player1.Y = (h - InitPaddleHeight) / 2
+	g.Player1.Speed = initPaddleSpeed
 
 	g.Player2.X = w - InitPaddleShift - InitPaddleWidth
 	g.Player2.Y = (h - InitPaddleHeight) / 2
+	g.Player1.Speed = initPaddleSpeed
 
 	g.Ball.Cx = w / 2
 	g.Ball.Cy = h / 2
@@ -144,8 +146,8 @@ func (g *Game) update() {
 				g.Level++
 				g.Ball.Vx += speedIncrement
 				g.Ball.Vy += speedIncrement
-				g.Player1.Speed += speedIncrement
-				g.Player2.Speed += speedIncrement
+				g.Player1.Speed += speedIncrement / 2
+				g.Player2.Speed += speedIncrement / 2
 			}
 		}
 

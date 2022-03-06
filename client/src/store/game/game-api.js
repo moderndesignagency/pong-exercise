@@ -19,9 +19,18 @@ export const gameApi = createApi({
           await cacheDataLoaded
 
           ws.onmessage = event => {
-            const data = JSON.parse(event.data)
+            let data
+            try {
+              data = JSON.parse(event.data)
+            } catch (e) {
+              console.error('Error when parsing JSON from server')
+            }
+
             const cachedEntry = getCacheEntry()
-            if (data.state !== GameState.PLAY && data.state === cachedEntry.data?.state) {
+            if (
+              !data ||
+              (data.state !== GameState.PLAY && data.state === cachedEntry.data?.state)
+            ) {
               return
             }
 
