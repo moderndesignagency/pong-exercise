@@ -6,7 +6,9 @@ import (
 	"log"
 	"time"
 
+	"github.com/moderndesignagency/pong-exercise/server/input"
 	"github.com/moderndesignagency/pong-exercise/server/pong"
+	"github.com/moderndesignagency/pong-exercise/server/ws"
 )
 
 type Game struct {
@@ -63,8 +65,8 @@ func (g *Game) Init() {
 		Width:  InitPaddleWidth,
 		Height: InitPaddleHeight,
 		Color:  whiteColor,
-		Up:     pong.KeyW,
-		Down:   pong.KeyS,
+		Up:     input.KeyW,
+		Down:   input.KeyS,
 	}
 	g.Player2 = &pong.Paddle{
 		X:      windowWidth - InitPaddleShift - InitPaddleWidth,
@@ -74,8 +76,8 @@ func (g *Game) Init() {
 		Width:  InitPaddleWidth,
 		Height: InitPaddleHeight,
 		Color:  whiteColor,
-		Up:     pong.KeyUp,
-		Down:   pong.KeyDown,
+		Up:     input.KeyUp,
+		Down:   input.KeyDown,
 	}
 	g.Ball = &pong.Ball{
 		Cx:     float32(windowWidth / 2),
@@ -109,23 +111,26 @@ func (g *Game) reset(state GameState) {
 	g.Ball.Vy = -initBallVelocity
 }
 
-func (g *Game) Update() {
+func (g *Game) update() {
 	switch g.State {
 	case StartState:
-		// @Todo: the listen to keys and fix the bottom line
-		g.State = PlayState
+		if input.IsKeyJustPressed(input.KeySpace) {
+			g.State = PlayState
+		}
 
 	case GameOverState:
-		// @Todo: listen to the space key to be pressed
-		// Noop
+		if input.IsKeyJustPressed(input.KeySpace) {
+			g.reset(StartState)
+			g.State = PlayState
+		}
 
 	case PlayState:
 		w, _ := g.Screen.Size()
 
-		// g.Player1.Update(g.Screen)
+		g.Player1.Update(g.Screen)
 		// g.Player2.Update(g.Screen)
 		// @FixMe: remove the code above
-		g.Player1.AiUpdate(g.Screen, g.Ball)
+		// g.Player1.AiUpdate(g.Screen, g.Ball)
 		g.Player2.AiUpdate(g.Screen, g.Ball)
 
 		prevVx := g.Ball.Vx
@@ -148,7 +153,7 @@ func (g *Game) Update() {
 		} else if g.Ball.Cx+g.Ball.Radius > float32(w) {
 			g.Player1.Score += 1
 			g.reset(PlayState)
-		} else if g.Level > 50 {
+		} else if g.Level > 20 {
 			// @FixMe: remove this code
 			g.Player1.Score += 1
 			g.Player2.Score += 1
@@ -161,18 +166,19 @@ func (g *Game) Update() {
 	}
 }
 
-func (g *Game) Start(hub *Hub) {
+func (g *Game) Start(hub *ws.Hub) {
 	// 50 FPS
 	ticker := time.NewTicker(time.Second / 50)
 
 	go func() {
 		for {
 			<-ticker.C
-			g.Update()
+			input.UpdateInputState()
+			g.update()
 			if v, err := json.Marshal(g); err != nil {
 				log.Fatalln("Error when Marshalling the game state", err)
 			} else {
-				hub.broadcast <- v
+				hub.Broadcast <- v
 			}
 		}
 	}()

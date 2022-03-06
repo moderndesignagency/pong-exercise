@@ -5,6 +5,8 @@ import (
 	"flag"
 	"log"
 	"net/http"
+
+	"github.com/moderndesignagency/pong-exercise/server/ws"
 )
 
 var g *Game
@@ -27,15 +29,14 @@ func getGameState(rw http.ResponseWriter, r *http.Request) {
 
 func main() {
 	g = NewGame()
-	hub := newHub()
+	hub := ws.NewHub()
 
-	go hub.run()
+	go hub.Run()
 	go g.Start(hub)
 
 	http.HandleFunc("/", getGameState)
 	http.HandleFunc("/ws", func(rw http.ResponseWriter, r *http.Request) {
-		log.Println("New Connexion, Total existing connections:", len(hub.clients))
-		serveWs(hub, rw, r)
+		ws.ServeWs(hub, rw, r)
 	})
 
 	if err := http.ListenAndServe(*addr, nil); err != nil {
