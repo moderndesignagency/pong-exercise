@@ -56,8 +56,11 @@ func (h *Hub) Run() {
 				}
 			}
 		case i := <-h.input:
-			log.Println(input.Key(i))
-			input.AddPressedKey(input.Key(i), time.Now())
+			k := input.Key(i)
+			log.Println(k)
+			if k.IsValid() {
+				input.AddPressedKey(k, time.Now())
+			}
 		}
 	}
 }
