@@ -17,7 +17,7 @@ var (
 	}
 )
 
-const keyPressedValidity = 20 // 20 Milliseconds => 50 FPS
+const keyPressedValidity = 100 // 0.1 second
 
 func AddPressedKey(k Key, t time.Time) {
 	theKeyPressMap.m.Lock()
