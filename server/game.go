@@ -68,6 +68,7 @@ func (g *Game) Init() {
 		Color:  whiteColor,
 		Up:     input.KeyW,
 		Down:   input.KeyS,
+		IsAI:   os.Getenv("PLAYER1_AI") == "true",
 	}
 	g.Player2 = &pong.Paddle{
 		X:      windowWidth - InitPaddleShift - InitPaddleWidth,
@@ -79,6 +80,7 @@ func (g *Game) Init() {
 		Color:  whiteColor,
 		Up:     input.KeyUp,
 		Down:   input.KeyDown,
+		IsAI:   os.Getenv("PLAYER2_AI") == "true",
 	}
 	g.Ball = &pong.Ball{
 		Cx:     float32(windowWidth / 2),
@@ -131,13 +133,8 @@ func (g *Game) update() {
 	case PlayState:
 		w, _ := g.Screen.Size()
 
-		// g.Player1.Update(g.Screen)
-		g.Player1.AiUpdate(g.Screen, g.Ball)
-		if os.Getenv("PLAYER2_AI") == "true" {
-			g.Player2.AiUpdate(g.Screen, g.Ball)
-		} else {
-			g.Player2.Update(g.Screen)
-		}
+		g.Player1.Update(g.Screen, g.Ball)
+		g.Player2.Update(g.Screen, g.Ball)
 
 		prevVx := g.Ball.Vx
 		g.Ball.Update(g.Player1, g.Player2, g.Screen)

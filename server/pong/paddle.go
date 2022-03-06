@@ -16,6 +16,7 @@ type Paddle struct {
 	Score   int         `json:"score"`
 	Up      input.Key   `json:"-"`
 	Down    input.Key   `json:"-"`
+	IsAI    bool        `json:"isAI"`
 	pressed keysPressed
 }
 
@@ -24,7 +25,12 @@ type keysPressed struct {
 	down bool
 }
 
-func (p *Paddle) Update(screen *Screen) {
+func (p *Paddle) Update(screen *Screen, b *Ball) {
+	if p.IsAI {
+		p.AiUpdate(screen, b)
+		return
+	}
+
 	_, h := screen.Size()
 
 	// @Todo: Add the key management here
