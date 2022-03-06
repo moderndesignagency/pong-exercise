@@ -23,9 +23,17 @@ func (b *Ball) Update(leftPaddle *Paddle, rightPaddle *Paddle, screen *Screen) {
 	}
 
 	// bounce off right paddle
-	if b.Vx > 0 && nextX+b.Radius > rightPaddle.X && b.Cy+b.Radius > rightPaddle.Y && b.Cy-b.Radius < rightPaddle.Y+float32(rightPaddle.Height) {
+	if b.Vx > 0 &&
+		nextX+b.Radius > rightPaddle.X &&
+		b.Cy+b.Radius > rightPaddle.Y &&
+		b.Cy-b.Radius < rightPaddle.Y+float32(rightPaddle.Height) &&
+		nextX+b.Radius < rightPaddle.X+float32(rightPaddle.Width) {
 		b.Vx = -b.Vx
-	} else if b.Vx < 0 && b.Cx-b.Radius < leftPaddle.X+float32(leftPaddle.Width) && b.Cy+b.Radius > leftPaddle.Y && b.Cy-b.Radius < leftPaddle.Y+float32(leftPaddle.Height) {
+	} else if b.Vx < 0 &&
+		b.Cx-b.Radius < leftPaddle.X+float32(leftPaddle.Width) &&
+		b.Cy+b.Radius > leftPaddle.Y &&
+		b.Cy-b.Radius < leftPaddle.Y+float32(leftPaddle.Height) &&
+		b.Cx-b.Radius > leftPaddle.X {
 		b.Vx = -b.Vx
 	}
 
