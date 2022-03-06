@@ -29,5 +29,7 @@ func AddPressedKey(k Key, t time.Time) {
 }
 
 func IsKeyPressed(k Key) bool {
+	theKeyPressMap.m.RLock()
+	defer theKeyPressMap.m.RUnlock()
 	return time.Since(theKeyPressMap.keys[k]).Milliseconds() <= keyPressedValidity
 }
