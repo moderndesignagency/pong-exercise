@@ -96,10 +96,10 @@ func (g *Game) reset(state GameState) {
 	g.State = state
 	g.rally = 0
 	g.Level = 1
-	g.Color = pong.RandomColor()
 	if state == StartState {
 		g.Player1.Score = 0
 		g.Player2.Score = 0
+		g.Color = pong.RandomColor()
 	}
 	g.Player1.X = InitPaddleShift
 	g.Player1.Y = (h - InitPaddleHeight) / 2
