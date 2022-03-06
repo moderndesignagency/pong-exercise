@@ -13,22 +13,18 @@ export const gameApi = createApi({
         arg,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved, getCacheEntry, dispatch, extra }
       ) {
-        console.log('extra', extra)
-        
-        const {ws} = extra
+        const { ws } = extra
         try {
           // wait for the initial query to resolve before proceeding
           await cacheDataLoaded
-          
+
           ws.onmessage = event => {
             const data = JSON.parse(event.data)
             const cachedEntry = getCacheEntry()
-            if (
-              data.state !== GameState.PLAY && data.state === cachedEntry.data?.state
-            ) {
+            if (data.state !== GameState.PLAY && data.state === cachedEntry.data?.state) {
               return
             }
-  
+
             updateCachedData(() => {
               return data
             })
@@ -38,7 +34,6 @@ export const gameApi = createApi({
           ws.onerror = () => dispatch(updateOnlineStatus({ status: OnlineStatus.OFFLINE }))
 
           ws.open()
-
         } catch {
           // no-op in case `cacheEntryRemoved` resolves before `cacheDataLoaded`,
           // in which case `cacheDataLoaded` will throw
@@ -54,4 +49,3 @@ export const gameApi = createApi({
 })
 
 export const { useGetGameStateQuery } = gameApi
-
