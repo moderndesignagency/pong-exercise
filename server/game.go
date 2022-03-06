@@ -26,7 +26,7 @@ type Game struct {
 const (
 	InitBallRadius   = 10.0
 	initBallVelocity = 5.0
-	initPaddleSpeed  = 10.0
+	initPaddleSpeed  = 8.0
 	speedUpdateCount = 6
 	speedIncrement   = 0.5
 )
@@ -71,7 +71,7 @@ func (g *Game) Init() {
 	g.Player2 = &pong.Paddle{
 		X:      windowWidth - InitPaddleShift - InitPaddleWidth,
 		Y:      (windowHeight - InitPaddleHeight) / 2,
-		Score:  2,
+		Score:  0,
 		Speed:  initPaddleSpeed,
 		Width:  InitPaddleWidth,
 		Height: InitPaddleHeight,
