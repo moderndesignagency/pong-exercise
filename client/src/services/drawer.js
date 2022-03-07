@@ -151,8 +151,16 @@ function drawGameOver(canvas, gameState) {
 
   ctx.textAlign = 'left'
   ctx.fillText('Controls: W/S', 30, canvas.height - 30)
-  ctx.fillText(gameState.player1.isAI ? 'Computer' : 'Human', 30, canvas.height - 60)
+  ctx.fillText(
+    `${gameState.player1.isAI ? 'Computer' : 'Human'}: ${gameState.player1.score}`,
+    30,
+    canvas.height - 60
+  )
   ctx.textAlign = 'right'
   ctx.fillText('Controls: Up/Down', canvas.width - 30, canvas.height - 30)
-  ctx.fillText(gameState.player2.isAI ? 'Computer' : 'Human', canvas.width - 30, canvas.height - 60)
+  ctx.fillText(
+    `${gameState.player2.isAI ? 'Computer' : 'Human'}: ${gameState.player2.score}`,
+    canvas.width - 30,
+    canvas.height - 60
+  )
 }
