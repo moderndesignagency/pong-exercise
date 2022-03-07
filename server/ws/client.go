@@ -127,7 +127,7 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	log.Println("New Connexion, Total existing connections:", len(hub.clients))
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return
 	}
 	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 512), timeAdded: time.Now()}

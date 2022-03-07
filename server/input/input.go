@@ -17,7 +17,7 @@ var (
 	}
 )
 
-const keyPressedValidity = 50 // 0.1 second
+const keyPressedValidity = 50 // 50 milliseconds
 
 func AddPressedKey(k Key, t time.Time) {
 	theKeyPressMap.m.Lock()

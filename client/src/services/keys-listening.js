@@ -24,9 +24,9 @@ export default function initKeysListening() {
   }
 
   const sendKeyToServer = key => {
-    if(keysPressed[key]) {
+    if (keysPressed[key]) {
       websocket.send(key)
-      setTimeout(() => sendKeyToServer(key), 200)
+      setTimeout(() => sendKeyToServer(key), 100)
     }
   }
 

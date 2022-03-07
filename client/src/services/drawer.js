@@ -1,7 +1,6 @@
 import GameState from '../enums/game-state'
 
 function scaleCanvas(canvas) {
-  console.log(canvas.parentElement)
   const parentHeight = canvas.parentElement.offsetHeight
   const parentWidth = canvas.parentElement.offsetWidth
   canvas.style.transform = `scale(${Math.min(

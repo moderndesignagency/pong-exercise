@@ -27,7 +27,7 @@ type Game struct {
 const (
 	InitBallRadius   = 10.0
 	initBallVelocity = 5.0
-	initPaddleSpeed  = 8.0
+	initPaddleSpeed  = 9.0
 	speedUpdateCount = 6
 	speedIncrement   = 0.5
 )
@@ -144,7 +144,7 @@ func (g *Game) update() {
 			if (g.rally)%speedUpdateCount == 0 {
 				g.Level++
 				g.Ball.Vx += pong.Sign(g.Ball.Vx) * speedIncrement
-				g.Ball.Vy += pong.Sign(g.Ball.Vx) * speedIncrement
+				g.Ball.Vy += pong.Sign(g.Ball.Vy) * speedIncrement / 2
 				g.Player1.Speed += speedIncrement / 2
 				g.Player2.Speed += speedIncrement / 2
 			}
