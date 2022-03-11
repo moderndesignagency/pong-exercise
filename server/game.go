@@ -173,14 +173,20 @@ func (g *Game) Start(hub *ws.Hub) {
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	go func() {
+		countCall := 1
 		for {
 			<-ticker.C
+			prevState := g.State
 			input.UpdateInputState()
 			g.update()
-			if v, err := json.Marshal(g); err != nil {
-				log.Fatalln("Error when Marshalling the game state", err)
-			} else {
-				hub.Broadcast <- v
+			countCall += 1
+
+			if g.State == PlayState || (g.State == prevState && countCall%50 == 0) {
+				if v, err := json.Marshal(g); err != nil {
+					log.Fatalln("Error when Marshalling the game state", err)
+				} else {
+					hub.Broadcast <- v
+				}
 			}
 		}
 	}()
