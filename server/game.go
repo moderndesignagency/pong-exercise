@@ -5,6 +5,7 @@ import (
 	"image/color"
 	"log"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/moderndesignagency/pong-exercise/server/input"
@@ -167,7 +168,10 @@ func (g *Game) update() {
 func (g *Game) Start(hub *ws.Hub) {
 	// 50 FPS
 	ticker := time.NewTicker(time.Second / 50)
+	defer ticker.Stop()
 
+	wg := sync.WaitGroup{}
+	wg.Add(1)
 	go func() {
 		for {
 			<-ticker.C
@@ -180,9 +184,5 @@ func (g *Game) Start(hub *ws.Hub) {
 			}
 		}
 	}()
-
-	// @FixMe: find a better solution
-	time.Sleep(1000 * time.Hour)
-
-	defer ticker.Stop()
+	wg.Wait()
 }
