@@ -74,17 +74,8 @@ export function draw(canvas, gameState) {
   ctx.fillText('PLAYER 1', 170, 140)
   ctx.fillText('PLAYER 2', canvas.width - 190, 140)
 
-  // Level
-  ctx.font = '25px "Patrick Hand"'
-  ctx.fillText(`Level: ${gameState.level}`, canvas.width / 2, 30)
-
-  // Controls
-  ctx.textAlign = 'left'
-  ctx.fillText('Controls: W/S', 30, canvas.height - 30)
-  ctx.fillText(gameState.player1.isAI ? 'Computer' : 'Human', 30, canvas.height - 60)
-  ctx.textAlign = 'right'
-  ctx.fillText('Controls: Up/Down', canvas.width - 30, canvas.height - 30)
-  ctx.fillText(gameState.player2.isAI ? 'Computer' : 'Human', canvas.width - 30, canvas.height - 60)
+  // Controls & Level
+  drawControlsAndLevel(canvas, gameState)
 }
 
 function drawRect(ctx, x, y, w, h, color) {
@@ -145,8 +136,13 @@ function drawGameOver(canvas, gameState) {
   ctx.fillText('Hit Space to start a new Game', middleWidth, 400)
 
   // Controls & Level
+  drawControlsAndLevel(canvas, gameState)
+}
+
+function drawControlsAndLevel(canvas, gameState) {
+  const ctx = canvas.getContext('2d')
   ctx.font = '25px "Patrick Hand"'
-  ctx.fillText(`Level: ${gameState.level}`, middleWidth, 30)
+  ctx.fillText(`Level: ${gameState.level}`, canvas.width / 2, 30)
 
   ctx.textAlign = 'left'
   ctx.fillText('Controls: W/S', 30, canvas.height - 30)
