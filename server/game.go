@@ -166,8 +166,8 @@ func (g *Game) update() {
 }
 
 func (g *Game) Start(hub *ws.Hub) {
-	// 50 FPS
-	ticker := time.NewTicker(time.Second / 50)
+	const FPS = 50 // 50 FPS
+	ticker := time.NewTicker(time.Second / FPS)
 	defer ticker.Stop()
 
 	wg := sync.WaitGroup{}
@@ -181,7 +181,7 @@ func (g *Game) Start(hub *ws.Hub) {
 			g.update()
 			countCall += 1
 
-			if g.State == PlayState || (g.State == prevState && countCall%50 == 0) {
+			if g.State == PlayState || g.State != prevState || countCall%FPS == 0 {
 				if v, err := json.Marshal(g); err != nil {
 					log.Fatalln("Error when Marshalling the game state", err)
 				} else {
