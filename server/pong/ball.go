@@ -18,7 +18,8 @@ func (b *Ball) Update(leftPaddle *Paddle, rightPaddle *Paddle, screen *Screen) {
 	nextY := b.Cy + b.Vy
 
 	// Bounce off top and bottom edges
-	if nextY+b.Radius > h || b.Cy-b.Radius < 0 {
+	if nextY+b.Radius > h || nextY-b.Radius < 0 {
+		b.Cy = nextY
 		b.Vy = -b.Vy
 	}
 
@@ -28,12 +29,14 @@ func (b *Ball) Update(leftPaddle *Paddle, rightPaddle *Paddle, screen *Screen) {
 		b.Cy+b.Radius > rightPaddle.Y &&
 		b.Cy-b.Radius < rightPaddle.Y+float32(rightPaddle.Height) &&
 		nextX+b.Radius < rightPaddle.X+float32(rightPaddle.Width) {
+		b.Cx = nextX
 		b.Vx = -b.Vx
 	} else if b.Vx < 0 &&
-		b.Cx-b.Radius < leftPaddle.X+float32(leftPaddle.Width) &&
+		nextX-b.Radius < leftPaddle.X+float32(leftPaddle.Width) &&
 		b.Cy+b.Radius > leftPaddle.Y &&
 		b.Cy-b.Radius < leftPaddle.Y+float32(leftPaddle.Height) &&
-		b.Cx-b.Radius > leftPaddle.X {
+		nextX-b.Radius > leftPaddle.X {
+		b.Cx = nextX
 		b.Vx = -b.Vx
 	}
 

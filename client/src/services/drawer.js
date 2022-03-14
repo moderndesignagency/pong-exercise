@@ -38,8 +38,8 @@ export function draw(canvas, gameState) {
   // Drawing ball
   drawCircle(
     ctx,
-    gameState.ball.cx + gameState.ball.radius,
-    gameState.ball.cy + gameState.ball.radius,
+    gameState.ball.cx,
+    gameState.ball.cy,
     gameState.ball.radius,
     parseColor(gameState.ball.color)
   )
@@ -83,6 +83,7 @@ function drawRect(ctx, x, y, w, h, color) {
   ctx.beginPath()
   ctx.rect(x, y, w, h)
   ctx.fill()
+  ctx.closePath()
 }
 
 function drawCircle(ctx, cx, cy, radius, color) {
@@ -90,6 +91,7 @@ function drawCircle(ctx, cx, cy, radius, color) {
   ctx.beginPath()
   ctx.arc(cx, cy, radius, 0, Math.PI * 2, true)
   ctx.fill()
+  ctx.closePath()
 }
 
 function parseColor(color) {
