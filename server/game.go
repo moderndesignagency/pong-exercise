@@ -36,6 +36,7 @@ const (
 const (
 	windowWidth  = 900.0
 	windowHeight = 600.0
+	loseThresold = 200
 )
 
 const (
@@ -151,10 +152,10 @@ func (g *Game) update() {
 			}
 		}
 
-		if g.Ball.Cx-g.Ball.Radius < 0 {
+		if g.Ball.Cx < -loseThresold {
 			g.Player2.Score += 1
 			g.reset(PlayState)
-		} else if g.Ball.Cx+g.Ball.Radius > float32(w) {
+		} else if g.Ball.Cx > float32(w)+loseThresold {
 			g.Player1.Score += 1
 			g.reset(PlayState)
 		}
