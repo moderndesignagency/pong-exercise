@@ -61,14 +61,21 @@ func (p *Paddle) Update(screen *Screen, b *Ball) {
 }
 
 func (p *Paddle) AiUpdate(screen *Screen, b *Ball) {
-	meanPosition := b.Cy - float32(p.Height)/2
+	if (p.X-b.Cx)*b.Vx < 0 {
+		return
+	}
 	_, h := screen.Size()
 
-	if meanPosition < 0 {
+	middleBarHeight := p.Y + float32(p.Height)/2
+	if b.Cy < middleBarHeight-float32(p.Height)/4 {
+		p.Y -= p.Speed
+	} else if b.Cy > middleBarHeight+float32(p.Height)/4 {
+		p.Y += p.Speed
+	}
+
+	if p.Y < 0 {
 		p.Y = 0
-	} else if meanPosition+float32(p.Height) > h {
+	} else if p.Y+float32(p.Height) > h {
 		p.Y = h - float32(p.Height)
-	} else {
-		p.Y = meanPosition
 	}
 }
