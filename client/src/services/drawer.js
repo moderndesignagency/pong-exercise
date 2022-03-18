@@ -1,4 +1,5 @@
 import GameState from '../enums/game-state'
+import { startConfetti, stopConfetti } from './confetti'
 
 function scaleCanvas(canvas) {
   const parentHeight = canvas.parentElement.offsetHeight
@@ -34,6 +35,7 @@ export function draw(canvas, gameState) {
 
   const ctx = canvas.getContext('2d')
   drawRect(ctx, 0, 0, canvas.width, canvas.height, parseColor(gameState.color))
+  stopConfetti()
 
   // Drawing ball
   drawCircle(
@@ -139,6 +141,8 @@ function drawGameOver(canvas, gameState) {
 
   // Controls & Level
   drawControlsAndLevel(canvas, gameState)
+
+  startConfetti()
 }
 
 function drawControlsAndLevel(canvas, gameState) {
