@@ -36,7 +36,7 @@ function createImageEmitter({ canvas, x, y, startColor, endColor }) {
 
   emitter.addBehaviour(new Proton.Alpha(1, 0))
   emitter.addBehaviour(new Proton.Color(startColor, endColor))
-  emitter.addBehaviour(new Proton.Scale(2.5, 0.5))
+  emitter.addBehaviour(new Proton.Scale(2, 0.5))
   emitter.addBehaviour(
     new Proton.CrossZone(new Proton.RectZone(0, 0, canvas.width, canvas.height), 'dead')
   )
@@ -50,6 +50,7 @@ function createImageEmitter({ canvas, x, y, startColor, endColor }) {
 
 function emitterMove(emitter, ball) {
   emitter.p.set(ball.cx, ball.cy)
+  window.emitter = emitter
 }
 
 export function renderProton(ball) {
