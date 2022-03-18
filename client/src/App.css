@@ -20,6 +20,7 @@
 @media screen and (orientation: portrait) {
   .canvas-container {
     align-items: flex-start;
+    padding-top: 50px;
   }
 }
 
@@ -31,7 +32,26 @@
   align-items: center;
 }
 
-canvas {
+#dragon {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#game {
   border-top: 3px solid gray;
   border-bottom: 3px solid gray;
+}
+
+canvas {
+  transform-origin: 0 0;
+}
+
+.position-relative {
+  position: relative;
+  width: 100%;
+}
+
+.display-none {
+  display: none;
 }

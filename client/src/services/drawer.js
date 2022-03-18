@@ -1,19 +1,29 @@
 import GameState from '../enums/game-state'
 import { startConfetti, stopConfetti } from './confetti'
+import { renderProton } from './dragon'
+
+const game = {
+  hitPaddleAudio: new Audio('/assets/audio/hit_paddle.mp3'),
+  hitWallAudio: new Audio('/assets/audio/hit_paddle.mp3'),
+  previousState: null,
+  FPS: 50,
+}
 
 function scaleCanvas(canvas) {
-  const parentHeight = canvas.parentElement.offsetHeight
-  const parentWidth = canvas.parentElement.offsetWidth
+  const parentHeight = canvas.parentElement.parentElement.offsetHeight
+  const parentWidth = canvas.parentElement.parentElement.offsetWidth
   canvas.style.transform = `scale(${Math.min(
     parentHeight / canvas.height,
     parentWidth / canvas.width
   )})`
 }
 
-export function setupCanvas(canvas) {
+export function initCanvas(canvas) {
   canvas.setAttribute('width', '900')
   canvas.setAttribute('height', '600')
   scaleCanvas(canvas)
+  game.hitPaddleAudio.volume = 0.6
+  game.hitWallAudio.volume = 0.6
 
   window.addEventListener('resize', () => scaleCanvas(canvas))
 }
@@ -24,20 +34,36 @@ export function setupCanvas(canvas) {
  * @param {*} gameState The current game state
  */
 export function draw(canvas, gameState) {
+  window.canvas = canvas
   canvas.width = gameState.screen.width
   canvas.height = gameState.screen.height
 
   if (gameState.state === GameState.OVER) {
-    return drawGameOver(canvas, gameState)
+    drawGameOver(canvas, gameState)
   } else if (gameState.state === GameState.START) {
-    return drawGameStart(canvas, gameState)
+    drawGameStart(canvas, gameState)
+  } else {
+    drawGamePlay(canvas, gameState)
   }
+}
 
+// Game drawing functions
+
+function drawGamePlay(canvas, gameState) {
   const ctx = canvas.getContext('2d')
   drawRect(ctx, 0, 0, canvas.width, canvas.height, parseColor(gameState.color))
   stopConfetti()
 
-  // Drawing ball
+  const { previousState } = game
+  if (
+    previousState &&
+    Math.abs(previousState.ball.vy + gameState.ball.vy) < 1e-6 &&
+    Math.abs(previousState.ball.cy - gameState.ball.cy) < 1e-6
+  ) {
+    game.hitWallAudio.play()
+    shakeGameScene(ctx, gameState.ball.vy > 0 ? -4 : 4)
+  }
+
   drawCircle(
     ctx,
     gameState.ball.cx,
@@ -45,8 +71,16 @@ export function draw(canvas, gameState) {
     gameState.ball.radius,
     parseColor(gameState.ball.color)
   )
+  renderProton(gameState.ball)
 
-  // Drawing paddles
+  if (
+    previousState &&
+    Math.abs(previousState.ball.vx + gameState.ball.vx) < 1e-6 &&
+    Math.abs(previousState.ball.cx - gameState.ball.cx) < 1e-6
+  ) {
+    game.hitPaddleAudio.play()
+  }
+
   drawRect(
     ctx,
     gameState.player1.x,
@@ -64,40 +98,18 @@ export function draw(canvas, gameState) {
     parseColor(gameState.player1.color)
   )
 
-  // Score
   ctx.textAlign = 'center'
   ctx.font = 'bold 200px "Patrick Hand"'
   ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
   ctx.fillText(gameState.player1.score, 170, 300)
   ctx.fillText(gameState.player2.score, canvas.width - 190, 300)
 
-  // Players
   ctx.font = '30px "Patrick Hand"'
   ctx.fillText('PLAYER 1', 170, 140)
   ctx.fillText('PLAYER 2', canvas.width - 190, 140)
 
-  // Controls & Level
   drawControlsAndLevel(canvas, gameState)
-}
-
-function drawRect(ctx, x, y, w, h, color) {
-  ctx.fillStyle = color
-  ctx.beginPath()
-  ctx.rect(x, y, w, h)
-  ctx.fill()
-  ctx.closePath()
-}
-
-function drawCircle(ctx, cx, cy, radius, color) {
-  ctx.fillStyle = color
-  ctx.beginPath()
-  ctx.arc(cx, cy, radius, 0, Math.PI * 2, true)
-  ctx.fill()
-  ctx.closePath()
-}
-
-function parseColor(color) {
-  return `rgba(${color.R}, ${color.G}, ${color.B}, ${color.A / 255})`
+  game.previousState = gameState
 }
 
 function drawGameStart(canvas, gameState) {
@@ -139,10 +151,30 @@ function drawGameOver(canvas, gameState) {
   ctx.font = '50px "Patrick Hand"'
   ctx.fillText('Hit Space to start a new Game', middleWidth, 400)
 
-  // Controls & Level
   drawControlsAndLevel(canvas, gameState)
+  if (game.previousState) startConfetti()
+}
 
-  startConfetti()
+// Utility functions
+
+function drawRect(ctx, x, y, w, h, color) {
+  ctx.fillStyle = color
+  ctx.beginPath()
+  ctx.rect(x, y, w, h)
+  ctx.fill()
+  ctx.closePath()
+}
+
+function drawCircle(ctx, cx, cy, radius, color) {
+  ctx.fillStyle = color
+  ctx.beginPath()
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2, true)
+  ctx.fill()
+  ctx.closePath()
+}
+
+function parseColor(color) {
+  return `rgba(${color.R}, ${color.G}, ${color.B}, ${color.A / 255})`
 }
 
 function drawControlsAndLevel(canvas, gameState) {
@@ -164,4 +196,13 @@ function drawControlsAndLevel(canvas, gameState) {
     canvas.width - 30,
     canvas.height - 60
   )
+}
+
+function shakeGameScene(ctx, dy) {
+  if (Math.abs(dy) < 1) {
+    ctx.translate(0, 0)
+    return
+  }
+  ctx.translate(0, dy)
+  setTimeout(() => shakeGameScene(ctx, -dy / 2), 1000 / game.FPS)
 }
