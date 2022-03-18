@@ -3,6 +3,7 @@ import confetti from 'canvas-confetti'
 const animationState = {
   running: false,
   end: null,
+  winSound: new Audio('/assets/audio/win.mp3'),
 }
 
 export function startConfetti() {
@@ -10,6 +11,7 @@ export function startConfetti() {
 
   if (!animationState.running) {
     animate()
+    animationState.winSound.play()
   }
 }
 
@@ -36,6 +38,7 @@ function animate() {
 }
 
 export function stopConfetti() {
+  if (!animationState.running) return
   animationState.end = Date.now()
   animationState.running = false
   setTimeout(confetti.reset, 200)
