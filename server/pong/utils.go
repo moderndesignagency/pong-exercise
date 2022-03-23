@@ -3,7 +3,6 @@ package pong
 import (
 	"image/color"
 	"math/rand"
-	"time"
 )
 
 var foregroundColors = []color.Color{
@@ -21,15 +20,11 @@ var foregroundColors = []color.Color{
 }
 
 func RandomColor() color.Color {
-	source := rand.NewSource(time.Now().UnixMicro())
-	r := rand.New(source)
-	return foregroundColors[r.Intn(len(foregroundColors))]
+	return foregroundColors[rand.Intn(len(foregroundColors))]
 }
 
 func RandomPlusOrMinusOne() int {
-	source := rand.NewSource(time.Now().UnixMicro())
-	r := rand.New(source)
-	if r.Intn(100) < 50 {
+	if rand.Intn(100) < 50 {
 		return -1
 	}
 	return 1

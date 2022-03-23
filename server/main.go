@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"flag"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/moderndesignagency/pong-exercise/server/ws"
 )
@@ -29,6 +31,7 @@ func getGameState(rw http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	rand.Seed(time.Now().UnixMicro())
 	g = NewGame()
 	hub := ws.NewHub()
 
