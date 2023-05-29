@@ -8,8 +8,8 @@ name: Deploy to Firebase Hosting on merge
       - main
 
 env:
-  REACT_APP_WS_URL: wss://mda-pong-exercise.herokuapp.com/ws
-  REACT_APP_API_URL: https://mda-pong-exercise.herokuapp.com/
+  REACT_APP_WS_URL: wss://mda-pong-exercice.onrender.com/ws
+  REACT_APP_API_URL: https://mda-pong-exercice.onrender.com/
 
 jobs:
   build_and_deploy:
