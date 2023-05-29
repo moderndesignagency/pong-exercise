@@ -15,14 +15,11 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v2
 
-      - name: Go to client/ directory
-        run: cd client/
-
       - name: Install node modules
-        run: yarn
+        run: cd client/ && yarn
 
       - name: Run lint
-        run: yarn lint:check
+        run: cd client/ && yarn lint:check
 
   build_and_preview:
     needs: tests
