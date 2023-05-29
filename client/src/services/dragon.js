@@ -40,8 +40,8 @@ function createImageEmitter({ canvas, x, y, startColor, endColor }) {
   emitter.addBehaviour(
     new Proton.CrossZone(new Proton.RectZone(0, 0, canvas.width, canvas.height), 'dead')
   )
-  emitter.addBehaviour(new Proton.Rotate(0, Proton.getSpan(-8, 9), "add"));
-  emitter.addBehaviour(new Proton.RandomDrift(3, 3, 0.03));
+  emitter.addBehaviour(new Proton.Rotate(0, Proton.getSpan(-8, 9), 'add'))
+  emitter.addBehaviour(new Proton.RandomDrift(3, 3, 0.03))
 
   emitter.p.x = x
   emitter.p.y = y

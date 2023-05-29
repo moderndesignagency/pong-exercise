@@ -67,7 +67,7 @@ func (c *Client) readPump() {
 		_, message, err := c.conn.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Printf("error: %v", err)
+				log.Printf("💀 error: %v", err)
 			}
 			break
 		}
@@ -124,7 +124,7 @@ func (c *Client) writePump() {
 
 // serveWs handles websocket requests from the peer.
 func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
-	log.Println("New Connexion, Total existing connections:", len(hub.clients))
+	log.Println("🔥 New Connexion, Total existing connections:", len(hub.clients))
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Fatalln(err)

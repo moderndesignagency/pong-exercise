@@ -1,6 +1,6 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import OnlineStatusRenderer from "../OnlineStatus/OnlineStatusIndicator";
+import React from 'react'
+import { useSelector } from 'react-redux'
+import OnlineStatusRenderer from '../OnlineStatus/OnlineStatusIndicator'
 import styles from './header.module.css'
 
 export default function Header() {

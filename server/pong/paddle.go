@@ -33,7 +33,6 @@ func (p *Paddle) Update(screen *Screen, b *Ball) {
 
 	_, h := screen.Size()
 
-	// @Todo: Add the key management here
 	if input.IsKeyJustPressed(p.Up) {
 		p.pressed.down = false
 		p.pressed.up = true
