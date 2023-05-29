@@ -124,8 +124,7 @@ function drawGameStart(canvas, gameState) {
   ctx.font = 'bold 90px "Patrick Hand"'
   ctx.strokeText('⚡PONG GAME⚡', canvas.width / 2, 200)
 
-  ctx.font = '50px "Patrick Hand"'
-  ctx.fillText('Hit Space to start a new Game', canvas.width / 2, 300)
+  drawHitSpaceToStart(canvas, gameState, 300)
 }
 
 function drawGameOver(canvas, gameState) {
@@ -148,23 +147,39 @@ function drawGameOver(canvas, gameState) {
     320
   )
 
-  ctx.font = '50px "Patrick Hand"'
-  ctx.fillText('Hit Space to start a new Game', middleWidth, 400)
+  drawHitSpaceToStart(canvas, gameState, 400)
 
   drawControlsAndLevel(canvas, gameState)
   if (game.previousState) startConfetti()
 }
 
 // Utility functions
-
-function drawRect(ctx, x, y, w, h, color) {
+/**
+ * Draws a rectangle on the canvas
+ * @param {CanvasRenderingContext2D} ctx Canvas context
+ * @param {number} x x position
+ * @param {number} y y position
+ * @param {number} w width
+ * @param {number} h height
+ * @param {string} color Fill style color
+ * @param {number|number[]} borderRadius Single border or set of borders
+ */
+function drawRect(ctx, x, y, w, h, color, borderRadius = 0) {
   ctx.fillStyle = color
   ctx.beginPath()
-  ctx.rect(x, y, w, h)
+  ctx.roundRect(x, y, w, h, borderRadius)
   ctx.fill()
   ctx.closePath()
 }
 
+/**
+ * Draws a circle on canvas
+ * @param {CanvasRenderingContext2D} ctx Canvas context
+ * @param {number} cx Center X position
+ * @param {number} cy Center Y position
+ * @param {number} radius Radius of circle
+ * @param {string} color Fill style color
+ */
 function drawCircle(ctx, cx, cy, radius, color) {
   ctx.fillStyle = color
   ctx.beginPath()
@@ -173,29 +188,64 @@ function drawCircle(ctx, cx, cy, radius, color) {
   ctx.closePath()
 }
 
+/**
+ * Parses the color given by the sever to rgba format
+ * @param {Color} color parse a color from server
+ * @returns {string} The color in rgba format
+ */
 function parseColor(color) {
   return `rgba(${color.R}, ${color.G}, ${color.B}, ${color.A / 255})`
 }
 
 function drawControlsAndLevel(canvas, gameState) {
   const ctx = canvas.getContext('2d')
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
   ctx.font = '25px "Patrick Hand"'
   ctx.fillText(`Level: ${gameState.level}`, canvas.width / 2, 30)
 
   ctx.textAlign = 'left'
-  ctx.fillText('Controls: W/S', 30, canvas.height - 30)
+  ctx.fillText(`Controls: ${gameState.player1.isAI ? '🖥️' : 'W/S'}`, 30, canvas.height - 30)
   ctx.fillText(
     `${gameState.player1.isAI ? 'Computer' : 'Human'}: ${gameState.player1.score}`,
     30,
     canvas.height - 60
   )
   ctx.textAlign = 'right'
-  ctx.fillText('Controls: Up/Down', canvas.width - 30, canvas.height - 30)
+  ctx.fillText(
+    `Controls: ${gameState.player2.isAI ? '🖥️' : 'Up/Down'}`,
+    canvas.width - 30,
+    canvas.height - 30
+  )
   ctx.fillText(
     `${gameState.player2.isAI ? 'Computer' : 'Human'}: ${gameState.player2.score}`,
     canvas.width - 30,
     canvas.height - 60
   )
+}
+
+/**
+ * Draws the text "Hit Space to start a new game"
+ * @param {HTMLCanvasElement} canvas The canvas element
+ * @param {GameState} gameState The game state
+ * @param {number} y The y position where to draw
+ */
+function drawHitSpaceToStart(canvas, gameState, y) {
+  const ctx = canvas.getContext('2d')
+
+  ctx.font = '50px "Patrick Hand"'
+  const startNewGameText = 'Hit ⌨️ Space to start a new Game'
+  const textWidth = ctx.measureText(startNewGameText).width
+  drawRect(
+    ctx,
+    (canvas.width - textWidth) / 2 - 15,
+    y - 50,
+    textWidth + 30,
+    64,
+    'rgba(255, 255, 255, 0.9)',
+    10
+  )
+  ctx.fillStyle = parseColor(gameState.color)
+  ctx.fillText(startNewGameText, canvas.width / 2, y)
 }
 
 function shakeGameScene(ctx, dy) {
