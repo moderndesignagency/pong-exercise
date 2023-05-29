@@ -9,7 +9,20 @@ env:
   REACT_APP_API_URL: https://mda-pong-exercice.onrender.com/
 
 jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Install node modules
+        run: cd client/ && yarn
+
+      - name: Run lint
+        run: cd client/ && yarn lint:check
+
   build_and_preview:
+    needs: tests
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
