@@ -43,7 +43,8 @@ func main() {
 		ws.ServeWs(hub, rw, r)
 	})
 
+	log.Println("🚀 Starting server in port " + os.Getenv("PORT"))
 	if err := http.ListenAndServe(*addr, nil); err != nil {
-		log.Fatal("ListenAndServe error", err)
+		log.Fatal("💀 ListenAndServe error", err)
 	}
 }
