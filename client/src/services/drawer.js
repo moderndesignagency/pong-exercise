@@ -87,7 +87,8 @@ function drawGamePlay(canvas, gameState) {
     gameState.player1.y,
     gameState.player1.width,
     gameState.player1.height,
-    parseColor(gameState.player1.color)
+    parseColor(gameState.player1.color),
+    gameState.player1.width / 2
   )
   drawRect(
     ctx,
@@ -95,7 +96,8 @@ function drawGamePlay(canvas, gameState) {
     gameState.player2.y,
     gameState.player2.width,
     gameState.player2.height,
-    parseColor(gameState.player1.color)
+    parseColor(gameState.player1.color),
+    gameState.player2.width / 2
   )
 
   ctx.textAlign = 'center'

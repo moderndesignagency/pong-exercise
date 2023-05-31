@@ -34,13 +34,13 @@ const (
 )
 
 const (
-	windowWidth  = 900.0
+	windowWidth  = 1000.0
 	windowHeight = 600.0
 	loseThresold = 200
 )
 
 const (
-	InitPaddleWidth  = 20
+	InitPaddleWidth  = 10
 	InitPaddleHeight = 100
 	InitPaddleShift  = 50
 )
