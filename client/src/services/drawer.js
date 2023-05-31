@@ -1,4 +1,4 @@
-import GameState from '../enums/game-state'
+import { GameEvolutionState } from '../enums/game-state'
 import { startConfetti, stopConfetti } from './confetti'
 import { renderProton } from './dragon'
 
@@ -8,25 +8,8 @@ const game = {
   previousState: null,
   FPS: 50,
 }
-
-function scaleCanvas(canvas) {
-  const parentHeight = canvas.parentElement.parentElement.offsetHeight
-  const parentWidth = canvas.parentElement.parentElement.offsetWidth
-  canvas.style.transform = `scale(${Math.min(
-    parentHeight / canvas.height,
-    parentWidth / canvas.width
-  )})`
-}
-
-export function initCanvas(canvas) {
-  canvas.setAttribute('width', '900')
-  canvas.setAttribute('height', '600')
-  scaleCanvas(canvas)
-  game.hitPaddleAudio.volume = 0.6
-  game.hitWallAudio.volume = 0.6
-
-  window.addEventListener('resize', () => scaleCanvas(canvas))
-}
+game.hitPaddleAudio.volume = 0.6
+game.hitWallAudio.volume = 0.6
 
 /**
  * Draws the current game state on the canvas
@@ -38,9 +21,9 @@ export function draw(canvas, gameState) {
   canvas.width = gameState.screen.width
   canvas.height = gameState.screen.height
 
-  if (gameState.state === GameState.OVER) {
+  if (gameState.state === GameEvolutionState.OVER) {
     drawGameOver(canvas, gameState)
-  } else if (gameState.state === GameState.START) {
+  } else if (gameState.state === GameEvolutionState.START) {
     drawGameStart(canvas, gameState)
   } else {
     drawGamePlay(canvas, gameState)
@@ -87,7 +70,8 @@ function drawGamePlay(canvas, gameState) {
     gameState.player1.y,
     gameState.player1.width,
     gameState.player1.height,
-    parseColor(gameState.player1.color)
+    parseColor(gameState.player1.color),
+    gameState.player1.width / 2
   )
   drawRect(
     ctx,
@@ -95,7 +79,8 @@ function drawGamePlay(canvas, gameState) {
     gameState.player2.y,
     gameState.player2.width,
     gameState.player2.height,
-    parseColor(gameState.player1.color)
+    parseColor(gameState.player1.color),
+    gameState.player2.width / 2
   )
 
   ctx.textAlign = 'center'
@@ -167,7 +152,11 @@ function drawGameOver(canvas, gameState) {
 function drawRect(ctx, x, y, w, h, color, borderRadius = 0) {
   ctx.fillStyle = color
   ctx.beginPath()
-  ctx.roundRect(x, y, w, h, borderRadius)
+  if (typeof ctx.roundRect === 'function') {
+    ctx.roundRect(x, y, w, h, borderRadius)
+  } else {
+    ctx.rect(x, y, w, h)
+  }
   ctx.fill()
   ctx.closePath()
 }
