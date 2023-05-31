@@ -152,7 +152,11 @@ function drawGameOver(canvas, gameState) {
 function drawRect(ctx, x, y, w, h, color, borderRadius = 0) {
   ctx.fillStyle = color
   ctx.beginPath()
-  ctx.roundRect(x, y, w, h, borderRadius)
+  if (typeof ctx.roundRect === 'function') {
+    ctx.roundRect(x, y, w, h, borderRadius)
+  } else {
+    ctx.rect(x, y, w, h)
+  }
   ctx.fill()
   ctx.closePath()
 }
