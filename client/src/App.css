@@ -11,7 +11,6 @@
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  max-width: 900px;
   width: 100%;
   max-height: 100%;
 }
@@ -35,16 +34,18 @@
 #dragon {
   position: absolute;
   left: 0;
-  top: 0;
+  top: 8px;
 }
 
 #game {
-  border-top: 3px solid gray;
-  border-bottom: 3px solid gray;
+  border-top: 8px solid gray;
+  border-bottom: 8px solid gray;
+  border-image: repeating-linear-gradient(30deg, #FF0, #FF0 15px, #330 15px, #330 30px) 10;
 }
 
 canvas {
   transform-origin: 0 0;
+  transition: transform 0.4s ease;
 }
 
 .position-relative {

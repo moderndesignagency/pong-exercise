@@ -1,4 +1,4 @@
-import GameState from '../enums/game-state'
+import { GameEvolutionState } from '../enums/game-state'
 import { startConfetti, stopConfetti } from './confetti'
 import { renderProton } from './dragon'
 
@@ -8,25 +8,8 @@ const game = {
   previousState: null,
   FPS: 50,
 }
-
-function scaleCanvas(canvas) {
-  const parentHeight = canvas.parentElement.parentElement.offsetHeight
-  const parentWidth = canvas.parentElement.parentElement.offsetWidth
-  canvas.style.transform = `scale(${Math.min(
-    parentHeight / canvas.height,
-    parentWidth / canvas.width
-  )})`
-}
-
-export function initCanvas(canvas) {
-  canvas.setAttribute('width', '900')
-  canvas.setAttribute('height', '600')
-  scaleCanvas(canvas)
-  game.hitPaddleAudio.volume = 0.6
-  game.hitWallAudio.volume = 0.6
-
-  window.addEventListener('resize', () => scaleCanvas(canvas))
-}
+game.hitPaddleAudio.volume = 0.6
+game.hitWallAudio.volume = 0.6
 
 /**
  * Draws the current game state on the canvas
@@ -38,9 +21,9 @@ export function draw(canvas, gameState) {
   canvas.width = gameState.screen.width
   canvas.height = gameState.screen.height
 
-  if (gameState.state === GameState.OVER) {
+  if (gameState.state === GameEvolutionState.OVER) {
     drawGameOver(canvas, gameState)
-  } else if (gameState.state === GameState.START) {
+  } else if (gameState.state === GameEvolutionState.START) {
     drawGameStart(canvas, gameState)
   } else {
     drawGamePlay(canvas, gameState)

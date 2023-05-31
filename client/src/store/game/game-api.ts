@@ -1,25 +1,27 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import GameState from '../../enums/game-state'
+import { GameEvolutionState } from '../../enums/game-state'
 import OnlineStatus from '../../enums/online-status'
 import config from '../../config'
 import { updateOnlineStatus } from './game-slice'
+import { GameState } from './types'
+import CustomWebSocket from '../../models/CustomWebSocket'
 
 export const gameApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: config.apiURL }),
   endpoints: build => ({
-    getGameState: build.query({
+    getGameState: build.query<GameState, string>({
       query: channel => channel,
       async onCacheEntryAdded(
         arg,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved, getCacheEntry, dispatch, extra }
       ) {
-        const { ws } = extra
+        const { ws } = extra as { ws: CustomWebSocket }
         try {
           // wait for the initial query to resolve before proceeding
           await cacheDataLoaded
 
           ws.onmessage = event => {
-            let data
+            let data: GameState | undefined
             try {
               data = JSON.parse(event.data)
             } catch (e) {
@@ -29,7 +31,7 @@ export const gameApi = createApi({
             const cachedEntry = getCacheEntry()
             if (
               !data ||
-              (data.state !== GameState.PLAY && data.state === cachedEntry.data?.state)
+              (data.state !== GameEvolutionState.PLAY && data.state === cachedEntry.data?.state)
             ) {
               return
             }
