@@ -45,7 +45,7 @@ const useElementSize = <T extends Element = Element>(
     return () => {
       resizeObserver.disconnect()
     }
-  }, [target, observerOptions])
+  }, [target, observerOptions, size])
 
   return sizeDebounced
 }
